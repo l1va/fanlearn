@@ -25,6 +25,7 @@ fl_hardware - interactions between ROS and fanuc electric drive system
 
 ### Project Description
 NAME: FanLearn (Fanuc CR-7iA/L+ Reinforcement Learning)
+
 EQUIPMENT: Fanuc manipulator  + camera  +  LEGO like bricks (XXL size)
 
 Task description
