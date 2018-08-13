@@ -1,5 +1,5 @@
-### NAME: FanLearn (Fanuc CR-7iA/L+ Reinforcement Learning)
-### EQUIPMENT: Fanuc manipulator  + camera  +  LEGO like bricks (XL size)
+### **NAME**: FanLearn (Fanuc CR-7iA/L+ Reinforcement Learning)
+### **EQUIPMENT**: Fanuc manipulator  + camera  +  LEGO like bricks (XL size)
 
 ## To install the project from Github you need:
 1)Install GIT:
