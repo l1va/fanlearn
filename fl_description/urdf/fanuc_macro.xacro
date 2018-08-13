@@ -18,6 +18,10 @@
           <mesh filename="package://fl_description/meshes/cr7ia/collision/base_link.stl"/>
         </geometry>
       </collision>
+      <inertial>
+        <mass value="200"/>
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
     </link>
     <link name="${prefix}link_1">
       <visual>
@@ -33,6 +37,10 @@
           <mesh filename="package://fl_description/meshes/cr7ia/collision/link_1.stl"/>
         </geometry>
       </collision>
+      <inertial>
+        <mass value="15"/>
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
     </link>
     <link name="${prefix}link_2">
       <visual>
@@ -48,6 +56,10 @@
           <mesh filename="package://fl_description/meshes/cr7ial/collision/link_2.stl"/>
         </geometry>
       </collision>
+      <inertial>
+        <mass value="7"/>
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
     </link>
     <link name="${prefix}link_3">
       <visual>
@@ -63,6 +75,10 @@
           <mesh filename="package://fl_description/meshes/cr7ia/collision/link_3.stl"/>
         </geometry>
       </collision>
+      <inertial>
+        <mass value="4"/>
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
     </link>
     <link name="${prefix}link_4">
       <visual>
@@ -78,6 +94,10 @@
           <mesh filename="package://fl_description/meshes/cr7ial/collision/link_4.stl"/>
         </geometry>
       </collision>
+      <inertial>
+        <mass value="4"/>
+        <inertia ixx="0.47" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
     </link>
     <link name="${prefix}link_5">
       <visual>
@@ -93,6 +113,10 @@
           <mesh filename="package://fl_description/meshes/cr7ia/collision/link_5.stl"/>
         </geometry>
       </collision>
+      <inertial>
+        <mass value="1"/>
+        <inertia ixx="0" ixy="0" ixz="0" iyy="0.47" iyz="0" izz="0"/>
+      </inertial>
     </link>
     <link name="${prefix}link_6">
       <visual>
@@ -108,9 +132,13 @@
           <mesh filename="package://fl_description/meshes/cr7ia/collision/link_6.stl"/>
         </geometry>
       </collision>
+      <inertial>
+        <mass value="1"/>
+        <inertia ixx="0.15" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
+      </inertial>
     </link>
 
-    <!-- joints: main serial chain -->
+    <!-- joints: main serial chain -->   
     <joint name="${prefix}joint_1" type="revolute">
       <origin xyz="0 0 0.457" rpy="0 0 0" />
       <parent link="${prefix}base_link" />
