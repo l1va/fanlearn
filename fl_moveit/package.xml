@@ -26,7 +26,7 @@
 
   <test_depend>roslaunch</test_depend>
 
-  <exec_depend>fanuc_cr7ia_support</exec_depend>
+  <exec_depend>fl_description</exec_depend>
   <exec_depend>industrial_robot_simulator</exec_depend>
   <exec_depend>joint_state_publisher</exec_depend>
   <exec_depend>moveit_fake_controller_manager</exec_depend>
