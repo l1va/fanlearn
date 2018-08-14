@@ -1,5 +1,18 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
+  
+  <xacro:macro name="joint_transmission_macro" params="joint_name">
+    <transmission name="${joint_name}_transmssion">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${joint_name}">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>  
+      <actuator name="${joint_name}_motor">
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:macro>
+
   <xacro:macro name="fanuc_cr7ial" params="prefix">
     <!-- links: main serial chain -->
     <link name="${prefix}base_link">
@@ -217,6 +230,15 @@
       <parent link="${prefix}link_6" />
       <child link="${prefix}tool0" />
     </joint>
+
+
+
+  <joint_transmission_macro joint_name="${prefix}joint_1"/>
+  <joint_transmission_macro joint_name="${prefix}joint_2"/>
+  <joint_transmission_macro joint_name="${prefix}joint_3"/>
+  <joint_transmission_macro joint_name="${prefix}joint_4"/>
+  <joint_transmission_macro joint_name="${prefix}joint_5"/>
+  <joint_transmission_macro joint_name="${prefix}joint_6"/>
 
     <gazebo reference="base_link">
     <material>Gazebo/Green</material>
