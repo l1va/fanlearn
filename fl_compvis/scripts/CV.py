@@ -3,19 +3,17 @@
 import roslib
 import rospy
 from sensor_msgs.msg import Image
-from std_msgs.msg import Int32
-from rospy.numpy_msg import numpy_msg
-from rospy_tutorials.msg import Floats
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
-import numpy
+from fl_compvis.srv import *
+from fl_compvis.msg import *
 
-x=y=ox=oy=tx=ty=0.0
-pub = rospy.Publisher('co', numpy_msg(Floats), queue_size=6)
 
-def find_red(image):
-    im = bridge.imgmsg_to_cv2(image, "bgr8") 
-    print(im.shape)
+xe=ye=xo=yo=0.0
+
+cam=cv2.VideoCapture(0)
+def find_red(im):    
+    #im = bridge.imgmsg_to_cv2(image, "bgr8") 
     hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
     #print(hsv[1000][600])
     rl1=(0,100,100)
@@ -29,8 +27,8 @@ def find_red(image):
     mask2 = cv2.erode(mask2,None,iterations=2)
     mask2 = cv2.dilate(mask2, None, iterations=3)
     mask=cv2.addWeighted(mask1,1.0,mask2,1.0,0.0)
-    cv2.imshow("1",mask) 
-    cv2.waitKey()     
+    #cv2.imshow("1",mask) 
+    #cv2.waitKey(30)     
     cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
     M = cv2.moments(cnts[0])
     if M["m00"]<0.01:
@@ -40,29 +38,24 @@ def find_red(image):
     return x,y
 
 def detect(image):
-	global x,y,ox,oy,tx,ty
-	tx,ty=find_red(image)
-	a = numpy.array([x,y,ox,oy,tx,ty], dtype=numpy.float32)
-	pub.publish(a)
+	global xe,ye,xo,yo
+	xo,yo=find_red(image)
 
-def track(image):
-	global x,y,ox,oy,tx,ty
-	ox,oy=find_red(image)
-	a = numpy.array([x,y,ox,oy,tx,ty], dtype=numpy.float32)
-	pub.publish(a)
-
-def callback(msg):
-	print(msg.data)
-	if msg.data==1:
-		rospy.Subscriber('pylon_camera_node/image_raw', Image, detect)
-	else:
-		rospy.Subscriber('pylon_camera_node/image_raw', Image, track)
+def callback(req):
+	global xe,ye,xo,yo
+	#im=rospy.wait_for_message('pylon_camera_node/image_raw', Image)
+	#rospy.Subscriber('pylon_camera_node/image_raw', Image,detect)
+	g,im=cam.read()
+	print(find_red(im))
+	a=Coordinates(xe,ye,xo,yo)
+    	return COMVResponse(a)
+	
     
 def listener():
-    rospy.init_node('CV', anonymous=True)
-    rate = rospy.Rate(5)
-    rospy.Subscriber("control",Int32,callback)
-    rospy.spin()
+	rospy.init_node('Computervision')
+	s = rospy.Service('Computervision', COMV, callback)
+	rate = rospy.Rate(5)
+	rospy.spin()
     
 bridge=CvBridge()
 listener()
