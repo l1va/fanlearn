@@ -56,15 +56,17 @@ Change your laptop's IP settings to manual:
 adress: 192.168.1.5 (last number may be any, but it shouldn't be equil to fanuc controller adress - 33)
 subnet mask: 255.255.255.0
 
-![net1](/images/network1.png)
-![net2](/images/network2.png)
-![net3](/images/network3.png)
+![net1](images/network1.png)
+
+![net2](images/network2.png)
+
+![net3](images/network3.png)
 
 Then open windows file browser and write in adress line:
 ftp://192.168.1.33
 where 192.168.1.33 - robot controller IP adress.
 
-![net4](/images/network4.png)
+![net4](images/network4.png)
 
 After entering you should see robot controller folder with about of 177 files 
 (may be about 197 if ROS binaries was already installed on robot) 
@@ -86,7 +88,7 @@ First, create a new workcell in Roboguide, either by using the wizard.
 When using the wizard, be sure to select the correct Application package, as well as the correct robot type.
 On the software options screen, also make sure to select at least options R632 - KAREL and R648 - User Socket Messaging.
 
-![roboguide1](/images/roboguide1.png)
+![roboguide1](images/roboguide1.png)
 
 After completing the wizard, you should end up with an empty workcell with just your robot in the middle of it.
 
@@ -99,7 +101,7 @@ Click the Open button to add them to the Cell Browser.
 Now add the *.ls files in the tpe subdirectory as well. 
 The Files section in the Cell Browser should contain at least the files shown.
 
-![roboguide2](/images/roboguide2.png)
+![roboguide2](images/roboguide2.png)
 
 #### 4.3 Building
 
@@ -108,7 +110,7 @@ Now build all files by selecting Project→Build→All in Roboguide
 No errors or warnings should be reported, and the Programs section in the Cell Browser should show the compiled binaries 
 (TPREC is a default program and is not a part of ROS-Industrial)
 
-![roboguide3](/images/roboguide3.png)
+![roboguide3](images/roboguide3.png)
 
 #### 4.4 Uploading binaries to controller
 
@@ -144,11 +146,11 @@ Make sure the following programs are listed (note that the revision numbers may 
 
 ROS-Industrial Karel programs on the controller after installation
 
-![controller_panel1](/images/controller_panel1.png)
+![controller_panel1](images/controller_panel1.png)
 
 Then press [TYPE]->TP Programs and check next list
 
-![controller_panel2](/images/controller_panel2.png)
+![controller_panel2](images/controller_panel2.png)
 
 #### The ROS-Industrial programs are now installed on the controller.
 if something goes wrong, please refer to original guide 
@@ -213,7 +215,7 @@ Then go to the Setup Server Listing using:
 SHOW->SERVERS 
 #### 1.3 Tag configuring
 Pick two available tags and write down their numbers finally make sure tags are configured as 
-![ServerTags](/images/ServerTags.png)
+![ServerTags](images/ServerTags.png)
 #### 1.4 Check out
 Yes one step is completed now we move back to SETUP service and verify that the chosen Tags are in state STARTED. IF this not start then start each tag with:
 ACTION-> DEFINE then ACTION->START 
@@ -245,10 +247,10 @@ Fctn->START (COLD).
 ### 4) KAREL 
 #### 4.1 The data in these two tables will need to be entered into the configuration structures of the respective programs.
 The default configuration of the *ros_relay* program is shown in
-![ros_relay](/images/ros_relay_cfgvars.png)
+![ros_relay](images/ros_relay_cfgvars.png)
 
 The default configuration of the *ros_state* program is shown in
-![ros_state](/images/ros_state_cfgvars.png)
+![ros_state](images/ros_state_cfgvars.png)
 
 If the above defaults cannot be used, update the relevant entries with the new values. If for instance *Server Tag* 3 is not available, use the index number of a Tag that can be used.and TP Programs
 
@@ -258,13 +260,13 @@ Select *ros_state* or *ros_relay* and press ENTER.
 Press the DATA button
 Type->KAREL Vars. You should now see the *cfg_variable*. Press ENTER.
 If you selected *ros_state* then they show fig 1, to change the server tag used, navigate to the s_tag_nr press ENTER and input values. Press entering again when finished.
-![KarelVars](/images/KarelVars.png)
+![KarelVars](images/KarelVars.png)
 
 ### 5) TP Programs
 Unfortunately, the TPE programs cannot use the configuration data of the KAREL programs.
 So they must be manually updated every time we change the used flags, integer or position registers.
 Fortunately, only the ros_movesm program needs to be updated
-![ros_movesm](/images/ros_movesm.png)
+![ros_movesm](images/ros_movesm.png)
 
 On the TP, open the ros_movesm program, and update all statements referencing the flags, integer or position registers with the new values.
 In our case we renamed used flags *F1* & *F2* using
