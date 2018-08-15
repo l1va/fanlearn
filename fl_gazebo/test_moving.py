@@ -27,7 +27,7 @@ class Quartets:
 
 
 class Coordinates:
-    def __init__(self, x=0, y=0, z=0, q_x=0, q_y=0.5, q_z=0, q_w=0.5):
+    def __init__(self, x=0.0, y=0.2, z=0.0, q_x=0.0, q_y=0.5, q_z=0.0, q_w=0.5):
         self.x = x
         self.y = y
         self.z = z
@@ -43,8 +43,8 @@ class Coordinates:
 joint_names = ['joint_1', 'joint_2', 'joint_3',
                'joint_4', 'joint_5', 'joint_6']
 
-speed = 0.3
-time = 5
+speed = 0.5
+time = 0.25
 
 goal = Coordinates()
 
@@ -125,33 +125,33 @@ def main():
     while c != chr(27):
         c = raw_input('input\n')
         if c == 'd':
-            goal.x += 0.1
+            goal.x += 0.01
         elif c == 'a':
-            goal.x -= 0.1
+            goal.x -= 0.01
         elif c == 'w':
-            goal.y += 0.1
+            goal.y += 0.01
         elif c == 's':
-            goal.y -= 0.1
+            goal.y -= 0.01
         elif c == 'e':
-            goal.z += 0.1
+            goal.z += 0.01
         elif c == 'q':
-            goal.z -= 0.1
+            goal.z -= 0.01
         elif c == 'D':
-            goal.q.x += 0.1
+            goal.q.x += 0.01
         elif c == 'A':
-            goal.q.x -= 0.1
+            goal.q.x -= 0.01
         elif c == 'W':
-            goal.q.y += 0.1
+            goal.q.y += 0.01
         elif c == 'S':
-            goal.q.y -= 0.1
+            goal.q.y -= 0.01
         elif c == 'E':
-            goal.q.z += 0.1
+            goal.q.z += 0.01
         elif c == 'Q':
-            goal.q.z -= 0.1
+            goal.q.z -= 0.01
         elif c == 'C':
-            goal.q.w += 0.1
+            goal.q.w += 0.01
         elif c == 'Z':
-            goal.q.w -= 0.1
+            goal.q.w -= 0.01
 
 
         print(goal)
