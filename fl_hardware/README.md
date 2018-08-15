@@ -163,14 +163,21 @@ if you need more information:
 
 ### 1) Install ROS-Industrial packages to your Ubuntu 16.04 laptop
  Industrial core:
-`sudo apt-get install ros-kinetic-industrial-core`
+```
+sudo apt-get install ros-kinetic-industrial-core
+```
  ABB stack:
-`sudo apt-get install ros-kinetic-abb`
+```
+sudo apt-get install ros-kinetic-abb
+```
  Universal robot stack:
-`sudo apt-get install ros-kinetic-universal-robot`
+```
+sudo apt-get install ros-kinetic-universal-robot
+```
  ROS_canopen stack:
-`sudo apt-get install ros-kinetic-ros-canopen`
-
+```
+sudo apt-get install ros-kinetic-ros-canopen
+```
 ### 2) Create catkin workspace
 ```
 mkdir -p ~/catkin_ws/src
@@ -179,26 +186,32 @@ catkin_make
 ```
 
 ### 3) Install **fanuc driver**
- Installing industrial core package:
-`cd ~/catkin_ws/src`
-`git clone -b kinetic-devel https://github.com/ros-industrial/industrial_core.git`
-
- Installing fanuc package:
-`git clone -b indigo-devel https://github.com/ros-industrial/fanuc.git`
-`git clone -b indigo-devel https://github.com/ros-industrial/fanuc_experimental.git`
-`cd ~/catkin_ws`
-`catkin_make`
-
- Checking dependencies. This may install additional packages
-`cd ~/catkin_ws`
-`rosdep install --from-paths src --ignore-src --rosdistro kinetic`
-`catkin_make`
+ Industrial core package installation:
+``` 
+cd ~/catkin_ws/src
+git clone -b kinetic-devel https://github.com/ros-industrial/industrial_core.git
+```
+ Fanuc package installation:
+```
+git clone -b indigo-devel https://github.com/ros-industrial/fanuc.git
+git clone -b indigo-devel https://github.com/ros-industrial/fanuc_experimental.git
+cd ~/catkin_ws
+catkin_make
+```
+ Checking dependencies. This may install additional packages:
+ ```
+cd ~/catkin_ws
+rosdep install --from-paths src --ignore-src --rosdistro kinetic
+catkin_make
+```
 
 ### 4) Install *trac-ik* library:
-`sudo apt-get install ros-kinetic-trac-ik`
+```
+sudo apt-get install ros-kinetic-trac-ik
+```
 
 ### 5) To correct your current workspace in Terminal window open .bachrc file in your *Home* directory and write this command in the end of document:
-source /path/to/catkin_ws/devel/setup.bash
+source ~/catkin_ws/devel/setup.bash
 
 
 ## STEP3. Configuration of ROS-Industrial on Fanuc controllers
