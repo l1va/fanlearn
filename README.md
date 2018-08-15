@@ -2,11 +2,8 @@
 #### Equipment: Fanuc manipulator  + camera  +  LEGO like bricks (XL size)
 
 ## To install the project from Github you need:
-1)Install GIT:
-```
-sudo apt-get install git
-```
-2)Create new workspace:
+
+Create new workspace and clone the project:
 ```
 mkdir fanlearn_ws
 cd fanlearn_ws/

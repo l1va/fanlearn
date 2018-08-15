@@ -1,6 +1,8 @@
 # README
 # Fanuc CR-7iA/L ROS commissioning in 4 steps
 
+[ROS wiki for installation ros on Fanuc](http://wiki.ros.org/fanuc/Tutorials)
+
 ## STEP1. ROS-Industrial Installation:
 
 if you need more information:
@@ -228,7 +230,7 @@ Then go to the Setup Server Listing using:
 SHOW->SERVERS 
 #### 1.3 Tag configuring
 Pick two available tags and write down their numbers finally make sure tags are configured as 
-![ServerTags](images/ServerTags.png)
+![ServerTags](images/server_tags.png)
 #### 1.4 Check out
 Yes one step is completed now we move back to SETUP service and verify that the chosen Tags are in state STARTED. IF this not start then start each tag with:
 ACTION-> DEFINE then ACTION->START 
@@ -273,7 +275,7 @@ Select *ros_state* or *ros_relay* and press ENTER.
 Press the DATA button
 Type->KAREL Vars. You should now see the *cfg_variable*. Press ENTER.
 If you selected *ros_state* then they show fig 1, to change the server tag used, navigate to the s_tag_nr press ENTER and input values. Press entering again when finished.
-![KarelVars](images/KarelVars.png)
+![KarelVars](images/karel_vars.png)
 
 ### 5) TP Programs
 Unfortunately, the TPE programs cannot use the configuration data of the KAREL programs.

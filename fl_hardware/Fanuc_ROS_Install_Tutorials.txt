@@ -1,1 +1,0 @@
-[http://wiki.ros.org/fanuc/Tutorials](http://wiki.ros.org/fanuc/Tutorials)
