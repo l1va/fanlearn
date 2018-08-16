@@ -1,15 +1,17 @@
 #!/usr/bin/env python
+import sys
 import rospy
+import actionlib
+
 from move_goal_builder import MoveItGoalBuilder
 
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
-from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest, \
-    GetPositionIKResponse
-from moveit_msgs.msg import MoveGroupGoal
-from moveit_msgs.msg import MoveGroupActionGoal
-#from moveit_msgs.msg import ExecuteTrajectoryActionGoal
+from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest
+from moveit_msgs.msg import MoveGroupActionGoal, MoveGroupAction, ExecuteTrajectoryAction,ExecuteTrajectoryActionGoal
 from moveit_msgs.msg import MoveItErrorCodes
-import sys
+from sensor_msgs.msg import JointState
+from geometry_msgs.msg import PoseStamped, Pose
+from std_msgs.msg import Header
 
 class Quartets:
     def __init__(self, x=0, y=0, z=0, w=1):
@@ -35,11 +37,16 @@ class Coordinates:
 joint_names = ['joint_1', 'joint_2', 'joint_3',
                'joint_4', 'joint_5', 'joint_6']
 
-speed = 0.5
-time = 0.25
+speed = 3
+time = 2
 
-goal = Coordinates()
-
+goal = PoseStamped()
+goal.header.frame_id = "/base_link"
+goal.pose = Pose()
+goal.pose.position.x = 0.55
+goal.pose.position.z=0.93
+goal.pose.orientation.x=0.707
+goal.pose.orientation.z=0.707
 
 def move_to(pubs, positions, velocities, times):
     jt = JointTrajectory()
@@ -84,7 +91,7 @@ def parse_position_resp(pos_resp):
         print('IK Error: {}'.format(pos_resp.error_code.val))
 
 
-def solve_ik(goal):
+def solve_ik(posestamped):
     rospy.wait_for_service('compute_ik')
     try:
         print("try to solve ik...")
@@ -92,14 +99,15 @@ def solve_ik(goal):
         request.ik_request.group_name = "manipulator"
         request.ik_request.ik_link_name = "tool0"
         request.ik_request.attempts = 20
-        request.ik_request.pose_stamped.header.frame_id = "/base_link"
-        request.ik_request.pose_stamped.pose.position.x = goal.x
-        request.ik_request.pose_stamped.pose.position.y = goal.y
-        request.ik_request.pose_stamped.pose.position.z = goal.z
-        request.ik_request.pose_stamped.pose.orientation.x = goal.q.x
-        request.ik_request.pose_stamped.pose.orientation.y = goal.q.y
-        request.ik_request.pose_stamped.pose.orientation.z = goal.q.z
-        request.ik_request.pose_stamped.pose.orientation.w = goal.q.w
+        request.ik_request.pose_stamped = posestamped
+        # request.ik_request.pose_stamped.header.frame_id = "/base_link"
+        # request.ik_request.pose_stamped.pose.position.x = goal.x
+        # request.ik_request.pose_stamped.pose.position.y = goal.y
+        # request.ik_request.pose_stamped.pose.position.z = goal.z
+        # request.ik_request.pose_stamped.pose.orientation.x = goal.q.x
+        # request.ik_request.pose_stamped.pose.orientation.y = goal.q.y
+        # request.ik_request.pose_stamped.pose.orientation.z = goal.q.z
+        # request.ik_request.pose_stamped.pose.orientation.w = goal.q.w
         ik = rospy.ServiceProxy('compute_ik', GetPositionIK)
         resp = ik(request)
         return parse_position_resp(resp)
@@ -113,6 +121,9 @@ def main():
 
     sim_pub = rospy.Publisher('/arm_controller/command', JointTrajectory,
                           queue_size=10)
+
+    client = actionlib.SimpleActionClient('fibonacci', actionlib_tutorials.msg.FibonacciAction)
+
     fanuc_pub = rospy.Publisher('/joint_trajectory_action/goal', JointTrajectory,
                           queue_size=10)
     rospy.sleep(0.5)
@@ -255,12 +266,16 @@ def main3():
     sim_pub = rospy.Publisher('/arm_controller/command', JointTrajectory,
                           queue_size=10)
 
-    fanuc_pub = rospy.Publisher('/move_group/goal', MoveGroupActionGoal,
-                          queue_size=10)
+    # fanuc_pub = rospy.Publisher('/move_group/goal', MoveGroupActionGoal,
+    #                       queue_size=10)
+
+    fanuc_client = actionlib.SimpleActionClient('move_group', MoveGroupAction)
+
+    fanuc_client.wait_for_server()
 
     move_group_goal = MoveGroupActionGoal()
     builder = MoveItGoalBuilder()
-    builder.fixed_frame = 'base_link'
+    builder.fixed_frame = '/base_link'
     builder.gripper_frame = 'tool0'
     builder.group_name = 'manipulator'
 
@@ -268,44 +283,136 @@ def main3():
     while c != chr(27):
         c = raw_input('input\n')
         if c == 'd':
-            goal.x += 0.01
+            goal.pose.position.x += 0.01
         elif c == 'a':
-            goal.x -= 0.01
+            goal.pose.position.x -= 0.01
         elif c == 'w':
-            goal.y += 0.01
+            goal.pose.position.y += 0.01
         elif c == 's':
-            goal.y -= 0.01
+            goal.pose.position.y -= 0.01
         elif c == 'e':
-            goal.z += 0.01
+            goal.pose.position.z += 0.01
         elif c == 'q':
-            goal.z -= 0.01
+            goal.pose.position.z -= 0.01
         elif c == 'D':
-            goal.q.x += 0.01
+            goal.pose.orientation.x += 0.01
         elif c == 'A':
-            goal.q.x -= 0.01
+            goal.pose.orientation.x -= 0.01
         elif c == 'W':
-            goal.q.y += 0.01
+            goal.pose.orientation.y += 0.01
         elif c == 'S':
-            goal.q.y -= 0.01
+            goal.pose.orientation.y -= 0.01
         elif c == 'E':
-            goal.q.z += 0.01
+            goal.pose.orientation.z += 0.01
         elif c == 'Q':
-            goal.q.z -= 0.01
+            goal.pose.orientation.z -= 0.01
         elif c == 'C':
-            goal.q.w += 0.01
+            goal.pose.orientation.w += 0.01
         elif c == 'Z':
-            goal.q.w -= 0.01
+            goal.pose.orientation.w -= 0.01
 
+
+        goal.header = Header()
+        goal.header.frame_id = "/base_link"
         print(goal)
-
         position = solve_ik(goal)
         if position != None:
             builder.set_joint_goal(joint_names, position)
             builder.allowed_planning_time = time
-            builder.plan_only = True
-            move_group_goal.goal = builder.build()
-            fanuc_pub.publish(move_group_goal)
+            #builder.plan_only = True
+            # move_group_goal.goal = builder.build()
 
+            #fanuc_client.send_goal(move_group_goal)
+            js = rospy.wait_for_message('/joint_states', JointState)
+            #builder.start_state.joint_state = js
+            js.header.frame_id = "/base_link"
+            #print(js)
+            #builder.start_state.is_diff = False
+            builder.start_state.multi_dof_joint_state.header.frame_id = "/base_link"
+
+            tosend = builder.build()
+            tosend.request.workspace_parameters.header = js.header
+
+            fanuc_client.send_goal(tosend)
+            fanuc_client.wait_for_result()
+
+
+def main4():
+    rospy.init_node('tester', anonymous=True)
+    rospy.sleep(0.5)
+
+    sim_pub = rospy.Publisher('/arm_controller/command', JointTrajectory,
+                          queue_size=10)
+
+    # fanuc_pub = rospy.Publisher('/move_group/goal', MoveGroupActionGoal,
+    #                       queue_size=10)
+
+    fanuc_client = actionlib.SimpleActionClient('execute_trajectory', ExecuteTrajectoryAction)
+
+    fanuc_client.wait_for_server()
+
+    move_group_goal = MoveGroupActionGoal()
+    builder = MoveItGoalBuilder()
+    builder.fixed_frame = '/base_link'
+    builder.gripper_frame = 'tool0'
+    builder.group_name = 'manipulator'
+
+    c = ''
+    while c != chr(27):
+        c = raw_input('input\n')
+        if c == 'd':
+            goal.pose.position.x += 0.01
+        elif c == 'a':
+            goal.pose.position.x -= 0.01
+        elif c == 'w':
+            goal.pose.position.y += 0.01
+        elif c == 's':
+            goal.pose.position.y -= 0.01
+        elif c == 'e':
+            goal.pose.position.z += 0.01
+        elif c == 'q':
+            goal.pose.position.z -= 0.01
+        elif c == 'D':
+            goal.pose.orientation.x += 0.01
+        elif c == 'A':
+            goal.pose.orientation.x -= 0.01
+        elif c == 'W':
+            goal.pose.orientation.y += 0.01
+        elif c == 'S':
+            goal.pose.orientation.y -= 0.01
+        elif c == 'E':
+            goal.pose.orientation.z += 0.01
+        elif c == 'Q':
+            goal.pose.orientation.z -= 0.01
+        elif c == 'C':
+            goal.pose.orientation.w += 0.01
+        elif c == 'Z':
+            goal.pose.orientation.w -= 0.01
+
+
+        goal.header = Header()
+        goal.header.frame_id = "/base_link"
+        print(goal)
+        position = solve_ik(goal)
+        if position != None:
+            builder.set_joint_goal(joint_names, position)
+            builder.allowed_planning_time = time
+            #builder.plan_only = True
+            # move_group_goal.goal = builder.build()
+
+            #fanuc_client.send_goal(move_group_goal)
+            js = rospy.wait_for_message('/joint_states', JointState)
+            #builder.start_state.joint_state = js
+            js.header.frame_id = "/base_link"
+            #print(js)
+            #builder.start_state.is_diff = False
+            builder.start_state.multi_dof_joint_state.header.frame_id = "/base_link"
+
+            tosend = builder.build()
+            tosend.request.workspace_parameters.header = js.header
+
+            fanuc_client.send_goal(tosend)
+            fanuc_client.wait_for_result()
 
 if __name__ == "__main__":
-    main3()
+    main4()
