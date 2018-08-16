@@ -29,10 +29,10 @@ def find_coord(im):
     cnts = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
     print(len(cnts))
     if len(cnts)<1:
-	return
+        return
     M = cv2.moments(cnts[0])
     if M["m00"] <0.01:
-	return
+        return
     xo = int(M["m10"] / M["m00"])
     yo = int(M["m01"] / M["m00"])
     gl=(45,100,50)
@@ -57,7 +57,7 @@ def callback(req):
     bridge=CvBridge()
     client = actionlib.SimpleActionClient("~/pylon_camera_node/grab_images_raw", GrabImagesAction)
     if not client.wait_for_server(rospy.Duration.from_sec(10.0)):
-	print("error")
+        print("error")
     goal=GrabImagesGoal()
     goal.exposure_given = True
     goal.exposure_times = [rospy.get_param('~exposure_time', 16416)]
@@ -66,10 +66,10 @@ def callback(req):
     goal.gain_auto = False
     client.send_goal(goal)
     if not client.wait_for_result(rospy.Duration.from_sec(10.0)):
-	print("error")
+        print("error")
     result=client.get_result()
     im = bridge.imgmsg_to_cv2(result.images[0], "bgr8")
-    im=im[135:750,425:1055] 
+    im=im[85:690,405:1115]
     find_coord(im)
     a=Coordinates(xe,ye,xo,yo)
     return COMVResponse(a)
