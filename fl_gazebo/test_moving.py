@@ -26,7 +26,7 @@ class Quartets:
 
 
 class Coordinates:
-    def __init__(self, x=0.0, y=0.2, z=0.0, q_x=0.0, q_y=0.5, q_z=0.0, q_w=0.5):
+    def __init__(self, x=0.55, y=0.0, z=0.93, q_x=0.707, q_y=0.0, q_z=0.707, q_w=0.0):
         self.x = x
         self.y = y
         self.z = z
@@ -95,7 +95,7 @@ def solve_ik(goal):
         print("try to solve ik...")
         request = GetPositionIKRequest()
         request.ik_request.group_name = "manipulator"
-        request.ik_request.ik_link_name = "link_6"
+        request.ik_request.ik_link_name = "tool0" #"link_6"
         request.ik_request.attempts = 20
         request.ik_request.pose_stamped.header.frame_id = "/base_link"
         request.ik_request.pose_stamped.pose.position.x = goal.x
@@ -119,6 +119,11 @@ def main():
     pub = rospy.Publisher("/arm_controller/command", JointTrajectory,
                           queue_size=10)
     rospy.sleep(0.5)
+
+    #go to initial position 
+    position = solve_ik(goal)
+    if position != None:
+        move_to_point(pub, position, speed, time)
 
     c = ''
     while c != chr(27):
