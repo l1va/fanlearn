@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 import rospy
-from pynput.keyboard import Key, Listener
 
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest, \
