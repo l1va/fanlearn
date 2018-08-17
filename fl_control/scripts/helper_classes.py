@@ -44,7 +44,7 @@ class Quartets:
 
 
 class Coordinates:
-    def __init__(self, x=0.55, y=0.0, z=0.93, q_x=0.707, q_y=0.0, q_z=0.707, q_w=0.0):
+    def __init__(self, x=0.55, y=0.0, z=0.93, q_x=0.0, q_y=0.5, q_z=0.0, q_w=0.0):
         self.x = x
         self.y = y
         self.z = z

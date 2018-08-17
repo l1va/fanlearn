@@ -23,7 +23,7 @@ def main():
     rospy.sleep(0.5)
 
     fanuc = Fanuc()
-    brick = Brick()
+    brick = Brick(goal_tolerance)
 
     if contro_mode == 'Learning':
         print('Learning control mode ...')
