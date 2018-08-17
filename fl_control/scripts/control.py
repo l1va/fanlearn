@@ -62,9 +62,6 @@ def GP_handler(data):
 
 def main():
 
-
-
-
     if contro_mode == 'Learning':
         print('Learning control mode ...')
 
@@ -101,7 +98,6 @@ def main():
         while True:
             rospy.Subscriber("Gamepad_wasd", String, GP_handler)
             rospy.spin()
-
 
 
     else: # Keyboard control
