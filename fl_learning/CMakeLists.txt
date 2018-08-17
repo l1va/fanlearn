@@ -11,8 +11,6 @@ add_service_files(
 generate_messages(
   DEPENDENCIES
 )
-catkin_package(
-)
-include_directories(
-)
+catkin_package()
+include_directories()
 

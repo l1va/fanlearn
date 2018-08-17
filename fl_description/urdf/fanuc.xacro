@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<robot name="fanuc_cr7ial" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="fanuc_cr7ial" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <gazebo>
         <plugin name="ros_control" filename="libgazebo_ros_control.so">
@@ -16,29 +16,21 @@
     <xacro:include filename="$(find fl_description)/urdf/camera.urdf.xacro"/>
     <camera_sensor xyz="0.5 0 1.45"
                    rpy="0 ${3.1415/2} 0" parent="world"
-                   name="camera" topic="fl_camera">
+                   name="camera" topic="fanlearn_camera">
     </camera_sensor>
 
 
     <xacro:include filename="$(find fl_description)/urdf/table.urdf.xacro"/>
     <table_macro xyz="0.5 0 0"
                  size="1.2 1.2 0.6" parent="world"
-                 color="white" name="fl_table">
+                 name="fl_table">
     </table_macro>
 
     <xacro:include filename="$(find fl_description)/urdf/brick.xacro"/>
-    <table_macro xyz="0.5 0.2 0.35"
+    <brick_macro xyz="0.5 0.2 0.35"
                  size="0.1 0.1 0.1" parent="world"
-                 color="red" name="fl_box">
-    </table_macro>
-
-        <gazebo reference="fl_box">
-            <material>Gazebo/Orange</material>
-        </gazebo>
-
-        <gazebo reference="fl_table">
-            <material>Gazebo/White</material>
-        </gazebo>
+                 name="fl_box">
+    </brick_macro>
 
 
 </robot>
