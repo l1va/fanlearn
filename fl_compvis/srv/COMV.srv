@@ -1,3 +1,4 @@
-int32 A
+string real_or_simulation
 ---
-Coordinates B
+Coordinates tool
+Coordinates brick

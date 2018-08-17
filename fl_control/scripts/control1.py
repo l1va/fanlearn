@@ -11,24 +11,27 @@ xe=ye=xo=yo=xt=yt=0.0
 def reset(cor):
 	global xt,yt
 	input("change the position")
-	xt=cor.B.xo
-	yt=cor.B.yo
+	x_goal=cor.brick.x
+	y_goal=cor.brick.y
 
 def main():
     goal_tolrerance=15
     scale=6
-    global xe,ye,xo,yo,xt,yt
+    real_or_simulation="real"
+    global x_tool,y_tool,x_brick,y_brick,x_goal,y_goal
     rospy.wait_for_service('Computervision')
     compvis = rospy.ServiceProxy('Computervision', COMV)
     rospy.wait_for_service('determine_action')
     determine_action = rospy.ServiceProxy('determine_action', DetermineAction)
     while True:
-        if(abs(xo-xt)<goal_tolrerance and abs(yo-yt)<goal_tolrerance):
-            cor = compvis(1)
+        if(abs(x_goal-x_brick)<goal_tolrerance and abs(y_goal-y_brick)<goal_tolrerance):
+            cor = compvis(real_or_simulation="real")
+	    print(cor)
             reset(cor)
         else:
-            cor=compvis(1)
-            commands = determine_action(cor.B.xe/scale, cor.B.ye/scale, cor.B.xo/scale, cor.B.yo/scale, xt/scale, yt/scale)
+            cor=compvis(real_or_simulation="real")
+	    print(cor)
+            commands = determine_action(cor.tool.x/scale, cor.tool.y/scale, cor.brick.x/scale, cor.brick.y/scale, x_goal/scale, y_goal/scale)
             print(commands)
 
 main()
