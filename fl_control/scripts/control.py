@@ -24,6 +24,7 @@ def main():
 
     fanuc = Fanuc()
     brick = Brick(goal_tolerance)
+    print(brick.goal.x, brick.goal.y)
 
     if contro_mode == 'Learning':
         print('Learning control mode ...')
@@ -37,16 +38,19 @@ def main():
         determine_action = rospy.ServiceProxy('determine_action',
                                               DetermineAction)
 
-        cv_resp = compvis(real_or_simulation='real')
+        cv_resp = compvis(real_or_simulation="simulation")
         brick.goal = cv_resp.brick
 
         rate = rospy.Rate(HZ)
+	rate.sleep()
         while True:
             if brick.is_goal_achieved():
-                cv_resp = compvis(real_or_simulation='real')
+                cv_resp = compvis(real_or_simulation="simulation")
                 break  # TODO finish logic with getting new goal
             else:
-                cv_resp = compvis(real_or_simulation='real')
+                cv_resp = compvis(real_or_simulation="simulation")
+		print(cv_resp)
+		print(cv_resp.tool.x, cv_resp.tool.y, cv_resp.brick.x, cv_resp.brick.y)
                 commands = determine_action(cv_resp.tool.x / scale,
                                             cv_resp.tool.y / scale,
                                             cv_resp.brick.x / scale,

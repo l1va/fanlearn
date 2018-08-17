@@ -2,7 +2,7 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="camera">
     <xacro:include filename="$(find fl_description)/urdf/parameters.xacro"/>
 
-    <xacro:macro name="table_macro" params="xyz color parent name size">
+    <xacro:macro name="brick_macro" params="xyz color parent name size">
 
         <joint name="${name}_joint" type="fixed">
             <axis xyz="0 1 0"/>
@@ -33,7 +33,7 @@
             </inertial>
         </link>
         <gazebo reference="${name}">
-            <material>Gazebo/White</material>
+            <material>Gazebo/Red</material>
         </gazebo>
     </xacro:macro>
 

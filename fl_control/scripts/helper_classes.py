@@ -18,14 +18,14 @@ import tf
 from math import sqrt
 
 class Point2D:
-    def __init__(self, x, y):
+    def __init__(self, x=0.0, y=0.0):
         self.x = x
         self.y = y
 
 class Brick:
     def __init__(self, tolerance):
-        self.position = Point2D
-        self.goal = Point2D
+        self.position = Point2D()
+        self.goal = Point2D()
         self.tolerance = tolerance
 
     def dist_to_goal(self):

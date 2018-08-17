@@ -12,10 +12,15 @@ from cv_bridge import CvBridge, CvBridgeError
 xe=ye=xo=yo=0.0
 last_photo=Image()
 last_photo.encoding="bgr8"
+topic=""
 def find_coord(image):
     global xe,ye,xo,yo
+    global topic
     im = bridge.imgmsg_to_cv2(image, "bgr8")
-    im=im[85:690,405:1115]
+    if topic=="pylon_camera_node/image_raw":
+         im=im[85:690,405:1115]
+    else:
+         im=im[238:860,233:971]
     hsv = cv2.cvtColor(im, cv2.COLOR_BGR2HSV)
     #print(hsv[1000][600])
     rl1=(0,100,100)
@@ -58,7 +63,6 @@ def take_photo(img):
     global last_photo
     last_photo=img
 
-topic=""
 def callback(req):
     global last_photo
     global topic
@@ -66,7 +70,7 @@ def callback(req):
 	topic="pylon_camera_node/image_raw"
         rospy.Subscriber(topic, Image, take_photo)
     elif req.real_or_simulation == "simulation" and topic=="":
-	topic="/rrbot/camera1/image_raw"
+	topic="/fl_camera/image_raw"
 	rospy.Subscriber(topic, Image, take_photo)
     else:
     	find_coord(last_photo)
@@ -76,7 +80,7 @@ def callback(req):
     
 def listener():
     rospy.init_node('CV', anonymous=True)
-    rate = rospy.Rate(5)
+    rate = rospy.Rate(10)
     s = rospy.Service('Computervision', COMV, callback)
     rospy.spin()
     
