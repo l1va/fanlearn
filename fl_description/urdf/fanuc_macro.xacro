@@ -13,7 +13,13 @@
     </transmission>
   </xacro:macro>
 
-  <xacro:macro name="fanuc_cr7ial" params="prefix">
+  <xacro:macro name="fanuc_cr7ial" params="prefix parent">
+      <joint name="world_joint" type="fixed">
+    <parent link="${parent}" />
+    <child link = "${prefix}base_link" />
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </joint>
+
     <!-- links: main serial chain -->
     <link name="${prefix}base_link">
       <visual>

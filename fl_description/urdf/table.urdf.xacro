@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="camera">
+    <xacro:include filename="$(find fl_description)/urdf/parameters.xacro"/>
+
+    <xacro:macro name="table_macro" params="xyz color parent name size">
+
+        <joint name="${name}_joint" type="fixed">
+            <axis xyz="0 1 0"/>
+            <origin xyz="${xyz}" rpy="0 0 0"/>
+            <parent link="${parent}"/>
+            <child link="${name}"/>
+        </joint>
+
+        <link name="${name}">
+            <collision>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="${size}"/>
+                </geometry>
+            </collision>
+            <visual>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <geometry>
+                    <box size="${size}"/>
+                </geometry>
+                <material name="${color}"/>
+            </visual>
+            <inertial>
+                <mass value="${table_mass}"/>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <box_inertia m="${table_mass}" x="${table_size}" y="${table_size}" z="${table_size}"/>
+                <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+            </inertial>
+        </link>
+        <gazebo reference="${name}">
+            <material>Gazebo/Yellow</material>
+        </gazebo>
+    </xacro:macro>
+
+</robot>
