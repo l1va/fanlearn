@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="plato_robot">
+
+    <!-- Camera properties -->
+    <xacro:property name="camera_size" value="0.02"/>
+    <xacro:property name="camera_mass" value="0.1"/>
+
+    <xacro:property name="table_size" value="0.02"/>
+    <xacro:property name="table_mass" value="0.1"/>
+
+    <!-- Colors parameters -->
+    <xacro:property name="color_camera" value="Plato/Yellow"/>
+
+</robot>

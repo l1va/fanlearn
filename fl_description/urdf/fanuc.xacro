@@ -1,21 +1,29 @@
 <?xml version="1.0" ?>
 <robot name="fanuc_cr7ial" xmlns:xacro="http://ros.org/wiki/xacro">
 
-	<gazebo>
-    <plugin name="ros_control" filename="libgazebo_ros_control.so">
-    </plugin>
-  </gazebo>
+    <gazebo>
+        <plugin name="ros_control" filename="libgazebo_ros_control.so">
+        </plugin>
+    </gazebo>
+
+    <link name="world"/>
+
+    <xacro:include filename="$(find fl_description)/urdf/fanuc_macro.xacro"/>
+
+    <fanuc_cr7ial prefix="" parent="world"/>
 
 
-  <xacro:include filename="$(find fl_description)/urdf/fanuc_macro.xacro"/>
-  <fanuc_cr7ial prefix=""/>
+    <xacro:include filename="$(find fl_description)/urdf/camera.urdf.xacro"/>
+    <camera_sensor xyz="0.5 0 2"
+                   rpy="0 ${3.1415/2} 0" parent="world"
+                   name="camera" topic="fl_camera">
+    </camera_sensor>
 
-  <link name="world" />
 
-  <joint name="world_joint" type="fixed">
-    <parent link="world" />
-    <child link = "base_link" />
-    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
-  </joint>
+    <xacro:include filename="$(find fl_description)/urdf/table.urdf.xacro"/>
+    <table_macro xyz="0.5 0 0"
+                 size="1 2 0.4" parent="world"
+                 color="color_camera" name="fl_table">
+    </table_macro>
 
 </robot>
