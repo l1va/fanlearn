@@ -1,15 +1,136 @@
+import sys
 from geometry_msgs.msg import *
+import moveit_msgs
 from moveit_msgs.msg import (Constraints, JointConstraint, PositionConstraint,
-                             OrientationConstraint, BoundingVolume)
-from moveit_msgs.msg import MoveGroupAction, MoveGroupGoal
+                             OrientationConstraint, BoundingVolume,
+                             MoveGroupGoal, MoveItErrorCodes, MoveGroupAction,
+                             MoveGroupActionGoal, MoveGroupActionResult,
+                             MoveGroupActionFeedback)
+from actionlib.simple_action_client import SimpleActionClient
 from shape_msgs.msg import SolidPrimitive
 from tf.listener import TransformListener
-import actionlib
+from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest, GetPositionIKResponse
+from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
+from sensor_msgs.msg import JointState
 import copy
-import moveit_msgs.msg
 import rospy
 import tf
 
+
+class Quartets:
+    def __init__(self, x=0, y=0, z=0, w=1):
+        self.x = x
+        self.y = y
+        self.z = z
+        self.w = w
+
+
+class Coordinates:
+    def __init__(self, x=0.55, y=0.0, z=0.93, q_x=0.707, q_y=0.0, q_z=0.707, q_w=0.0):
+        self.x = x
+        self.y = y
+        self.z = z
+        self.q = Quartets(q_x, q_y, q_z, q_w)
+
+    def __str__(self):
+        return '({} {} {}) - quartets: ({} {} {} {})'.format(self.x, self.y,
+                                                             self.z, self.q.x,
+                                                             self.q.y, self.q.z,
+                                                             self.q.w)
+
+
+common_joints_names = ['joint_1', 'joint_2', 'joint_3',
+                       'joint_4', 'joint_5', 'joint_6']
+
+
+class Joints:
+    def __init__(self, names = common_joints_names, positions=[0]*6):
+        self.names = names
+        self.cur_positions = positions
+        self.goal_positions = positions
+
+class Tool:
+    def __init__(self, name='tool0'):
+        self.name = name
+        self.cur_position = Coordinates()
+        self.goal = Coordinates()
+
+class Fanuc:
+    def __init__(self, speed=0.5, planning_time=0.5):
+        self.joints = Joints()
+        self.tool = Tool()
+        self.speed = speed
+        self.planning_time = planning_time
+
+        self.sim_pub = rospy.Publisher('/arm_controller/command',
+                                       JointTrajectory, queue_size=10)
+
+        self._mg_action = MoveGroupAction()
+        self._builder = MoveItGoalBuilder()
+        self.action_client = SimpleActionClient('move_group', MoveGroupAction)
+        self.action_client.wait_for_server()
+
+    def simulate(self):
+        jt = JointTrajectory()
+        jt.joint_names = self.joints.names
+        jt.header.stamp = rospy.Time.now()
+
+        jtp = JointTrajectoryPoint()
+        jtp.positions = self.joints.goal_positions
+        jtp.velocities = [self.speed] * 6
+        jtp.time_from_start = rospy.Duration(self.planning_time)
+        jt.points.append(jtp)
+
+        self.sim_pub.publish(jt)
+        rospy.loginfo("%s: starting %.2f sec traj", "self.controller_name",
+                      self.planning_time)
+
+    def parse_position_resp(self, pos_resp):
+        if pos_resp.error_code.val == MoveItErrorCodes.SUCCESS:
+            print('OK')
+            return pos_resp.solution.joint_state.position
+        elif pos_resp.error_code.val == MoveItErrorCodes.NO_IK_SOLUTION:
+            print('No inverse kinematis solution')
+        else:
+            print('IK Error: {}'.format(pos_resp.error_code.val))
+
+    def solve_ik(self):
+        rospy.wait_for_service('compute_ik')
+        try:
+            print("try to solve ik...")
+            request = GetPositionIKRequest()
+            request.ik_request.group_name = "manipulator"
+            request.ik_request.ik_link_name = "tool0"
+            request.ik_request.attempts = 20
+            request.ik_request.pose_stamped.header.frame_id = "/base_link"
+            request.ik_request.pose_stamped.pose.position.x = self.tool.goal.x
+            request.ik_request.pose_stamped.pose.position.y = self.tool.goal.y
+            request.ik_request.pose_stamped.pose.position.z = self.tool.goal.z
+            request.ik_request.pose_stamped.pose.orientation.x = self.tool.goal.q.x
+            request.ik_request.pose_stamped.pose.orientation.y = self.tool.goal.q.y
+            request.ik_request.pose_stamped.pose.orientation.z = self.tool.goal.q.z
+            request.ik_request.pose_stamped.pose.orientation.w = self.tool.goal.q.w
+            ik = rospy.ServiceProxy('compute_ik', GetPositionIK)
+            resp = ik(request)
+            return self.parse_position_resp(resp)
+
+        except rospy.ServiceException as e:
+            print('Service call failed - {}'.format(e))
+
+    def go(self):
+        self.joints.goal_positions = self.solve_ik()
+        if self.joints.goal_positions != None:
+            # for simulator
+            self.simulate()
+
+            # for real robot
+            self._builder.set_joint_goal(self.joints.names,
+                                         self.joints.goal_positions)
+            self._builder.allowed_planning_time = self.planning_time
+            self._builder.plan_only = False
+            self._mg_action.action_goal = self._builder.build()
+            self.action_client.send_goal(self._mg_action.action_goal)
+            self.action_client.wait_for_result()
 
 class MoveItGoalBuilder(object):
     """Builds a MoveGroupGoal.
@@ -76,8 +197,8 @@ class MoveItGoalBuilder(object):
     def __init__(self):
         self.allowed_planning_time = 10.0
         self.fixed_frame = 'base_link'
-        self.gripper_frame = 'wrist_roll_link'
-        self.group_name = 'arm'
+        self.gripper_frame = 'tool0'
+        self.group_name = 'manipulator'
         self.planning_scene_diff = moveit_msgs.msg.PlanningScene()
         self.planning_scene_diff.is_diff = True
         self.planning_scene_diff.robot_state.is_diff = True
