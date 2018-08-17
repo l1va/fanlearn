@@ -15,7 +15,25 @@ from sensor_msgs.msg import JointState
 import copy
 import rospy
 import tf
+from math import sqrt
 
+class Point2D:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+class Brick:
+    def __init__(self, tolerance):
+        self.position = Point2D
+        self.goal = Point2D
+        self.tolerance = tolerance
+
+    def dist_to_goal(self):
+        return sqrt((self.goal.x - self.position.x)**2 +
+                    (self.goal.y - self.position.y)**2)
+
+    def is_goal_achieved(self):
+        return self.dist_to_goal() < self.tolerance
 
 class Quartets:
     def __init__(self, x=0, y=0, z=0, w=1):
@@ -38,10 +56,8 @@ class Coordinates:
                                                              self.q.y, self.q.z,
                                                              self.q.w)
 
-
 common_joints_names = ['joint_1', 'joint_2', 'joint_3',
                        'joint_4', 'joint_5', 'joint_6']
-
 
 class Joints:
     def __init__(self, names = common_joints_names, positions=[0]*6):
