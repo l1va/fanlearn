@@ -21,6 +21,37 @@ fl_gazebo - gazebo robot package
 
 fl_hardware - interactions between ROS and fanuc electric drive system
 
+## Required packages:
+**moveit**
+```
+sudo apt install ros-kinetic-moveit
+```
+**Python-pip (package manager)**
+```
+sudo apt install python-pip
+```
+**pyassimp**
+```
+pip install pyassimp
+```
+**gazebo-ros-control**
+```
+sudo apt install ros-kinetic-gazebo-ros-control
+```
+**trac-ik**
+```
+sudo apt-get install ros-kinetic-trac-ik
+```
+**robot-controllers**
+```
+sudo apt-get install ros-kinetic-robot-controllers
+```
+**gamepad**
+```
+sudo apt-get install ros-kinetic-joy
+```
+[Original gamepad configuring tutorial](http://wiki.ros.org/joy/Tutorials/ConfiguringALinuxJoystick)
+
 ## Project Description
 
 ### Task description

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>fl_description</name>
+  <version>0.0.0</version>
+  <description>The fl_description package</description>
+  <maintainer email="amx1989@yandex.ru">marat</maintainer>
+  <license>MIT</license>
+  <buildtool_depend>catkin</buildtool_depend>
+</package>
