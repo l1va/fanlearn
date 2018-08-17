@@ -11,7 +11,13 @@ scale = 6
 HZ = 10
 
 def main():
-    contro_mode = 'Learning' # or 'Keyboard' or 'Joystick'
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'Learning':
+            contro_mode = 'Learning'
+        elif sys.argv[1] == 'Joystick':
+            contro_mode = 'Joystick'
+    else:
+        contro_mode = 'Keyboard'
 
     rospy.init_node('control', anonymous=True)
     rospy.sleep(0.5)
