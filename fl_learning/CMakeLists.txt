@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
   FILES
   DetermineAction.srv
+  ExecuteAction.srv
 )
 generate_messages(
   DEPENDENCIES

@@ -1,0 +1,8 @@
+int64 action
+---
+int64 end_effector_x
+int64 end_effector_y
+int64 block_x
+int64 block_y
+int64 goal_x
+int64 goal_y

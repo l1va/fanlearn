@@ -16,12 +16,12 @@ def determine_action(req):
 
 def determine_action_service():
     rospy.init_node('learning')
-    s = rospy.Service('determine_action', DetermineAction, determine_action)
+    rospy.Service('determine_action', DetermineAction, determine_action)
     rospy.spin()
 
 def apply_optimal_policy(req):
     global Q_table
-    return np.argmax(Q_table[req.end_effector_x, req.end_effector_y, req.block_x, req.block_y, req.goal_x, req.goal_y, :])    
+    return np.argmax(Q_table[req.end_effector_x, req.end_effector_y, req.block_x, req.block_y, req.goal_x, req.goal_y, :])
 
 if __name__ == "__main__":
     determine_action_service()
