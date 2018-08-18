@@ -1,9 +1,13 @@
 <launch>
-  <include file="$(find fl_gazebo)/launch/simulate.launch"/>
-  <node pkg="fl_learning" type="learning.py" output="screen" name="learn">
-  </node>
-  <node pkg="fl_compvis" type="computer-vision.py" output="screen" name="see">
-  </node>
-  <node pkg="fl_control" type="control_learning_sim.py" output="screen" name="control">
-  </node>
+
+    <include file="$(find fl_gazebo)/launch/simulate.launch"/>
+    <include file="$(find fl_moveit)/launch/move_group.launch"/>
+
+    <node pkg="fl_learning" type="learning.py" output="screen" name="learn">
+    </node>
+    <node pkg="fl_compvis" type="get_coords.py" output="screen" name="see">
+    </node>
+
+    <node pkg="fl_control" type="control.py" output="screen" name="control">
+    </node>
 </launch>

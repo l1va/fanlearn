@@ -1,0 +1,11 @@
+<launch>
+
+    <include file="$(find fl_gazebo)/launch/simulate.launch"/>
+    <include file="$(find fl_moveit)/launch/move_group.launch"/>
+
+    <node pkg="fl_control" type="fanuc_teleop_joy.py" output="screen" name="listen_joy">
+    </node>
+
+    <node pkg="fl_control" type="joy_control.py" output="screen" name="joy_control">
+    </node>
+</launch>

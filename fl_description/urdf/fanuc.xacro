@@ -21,10 +21,10 @@
 
 
     <xacro:include filename="$(find fl_description)/urdf/table.urdf.xacro"/>
-    <table_macro xyz="0.5 0 0"
+<!--    <table_macro xyz="0.5 0 0"
                  size="1.2 1.2 0.6" parent="world"
                  name="fl_table">
-    </table_macro>
+    </table_macro>-->
 
     <xacro:include filename="$(find fl_description)/urdf/brick.xacro"/>
     <brick_macro xyz="0.5 0.2 0.35"

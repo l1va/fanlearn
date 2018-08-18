@@ -1,9 +1,16 @@
 <launch>
-	<include file="$(find pylon_camera) /launch/pylon_camera_node.launch"/>
-	<node pkg="fl_learning" type="learning.py" output="screen" name="learn">
-	</node>
-	<node pkg="fl_compvis" type="computer-vision.py" output="screen" name="see">
-	</node>
-	<node pkg="fl_control" type="control_learning_real.py" output="screen" name="control">
-	</node>
+
+    <include file="$(find pylon_camera) /launch/pylon_camera_node.launch"/>
+        <include file="$(find fl_moveit)/launch/move_group.launch"/>
+
+    <node pkg="fl_learning" type="learning.py" output="screen" name="learn">
+    </node>
+    <node pkg="fl_compvis" type="get_coords.py" output="screen" name="see">
+    </node>
+
+
+    <node pkg="fl_control" type="control.py" output="screen" name="control">
+    </node>
+
+
 </launch>

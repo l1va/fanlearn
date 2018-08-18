@@ -3,6 +3,7 @@ import rospy
 from std_msgs.msg import String
 from sensor_msgs.msg import Joy
 
+
 # This ROS Node converts Joystick inputs from the joy node into commands for Fanuc
 
 # Receives joystick messages (subscribed to Joy topic)
@@ -10,7 +11,6 @@ from sensor_msgs.msg import Joy
 # axis 1 aka left stick vertical controls forward/backward
 # axis 0 aka left stick horizonal controls right/left
 def callback(data):
-    print('callback')
     msg = String("0")
 
     if data.buttons[6] == 1:
@@ -35,8 +35,6 @@ def callback(data):
             msg.data = "x-"
         elif data.axes[1] == 1:
             msg.data = "x+"
-	    print('x++')		
-
         elif data.buttons[0] == 1:
             msg.data = "qx+"
         elif data.buttons[1] == 1:
@@ -49,17 +47,17 @@ def callback(data):
         pub.publish(msg)
 
 
-
-    # Intializes everything
+# Intializes everything
 def start():
-     # publishing to 'Gamepad_wasd' to control Fanuc
+    # publishing to 'Gamepad_wasd' to control Fanuc
     global pub
-    rospy.init_node('Gamepad_node')
-    pub = rospy.Publisher('Gamepad_wasd', String, queue_size=5)
+    rospy.init_node('gamepad_node')
+    pub = rospy.Publisher('gamepad_wasd', String, queue_size=5)
     # subscribed to joystick inputs on topic "joy"
     rospy.Subscriber("joy", Joy, callback)
     # starts the node
     rospy.spin()
 
+
 if __name__ == '__main__':
-        start()
+    start()
