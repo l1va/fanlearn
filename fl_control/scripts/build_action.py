@@ -25,12 +25,12 @@ def execute_pose(pose, planning_time=0.2):
     positions = solve_ik(pose)
     if positions != None:
         # real
-        # builder.set_joint_goal(joint_names, positions)
-        # builder.allowed_planning_time = planning_time
-        # builder.plan_only = False
-        # to_send = builder.build()
-        # action_client.send_goal(to_send)
-        # action_client.wait_for_result()
+        builder.set_joint_goal(joint_names, positions)
+        builder.allowed_planning_time = planning_time
+        builder.plan_only = False
+        to_send = builder.build()
+        action_client.send_goal(to_send)
+        action_client.wait_for_result()
 
         # simulation
         jt = JointTrajectory()
@@ -55,7 +55,6 @@ def solve_fk(js):  # TODO: test me
 
         fk = rospy.ServiceProxy('compute_fk', GetPositionFK)
         resp = fk(request)
-        print(resp)
         return parse_fk_resp(resp)
 
     except rospy.ServiceException as e:
@@ -83,8 +82,6 @@ def solve_ik(pose):
 
         ik = rospy.ServiceProxy('compute_ik', GetPositionIK)
         resp = ik(request)
-        print(request)
-        print(resp)
         return parse_ik_resp(resp)
 
     except rospy.ServiceException as e:

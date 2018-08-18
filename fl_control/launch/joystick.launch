@@ -3,6 +3,11 @@
     <include file="$(find fl_gazebo)/launch/simulate.launch"/>
     <include file="$(find fl_moveit)/launch/move_group.launch"/>
 
+    <rosparam param="joy_node/dev">/dev/input/js0</rosparam>
+
+    <node pkg="joy" type="joy_node" output="screen" name="joy_hw">
+    </node>
+
     <node pkg="fl_control" type="fanuc_teleop_joy.py" output="screen" name="listen_joy">
     </node>
 
