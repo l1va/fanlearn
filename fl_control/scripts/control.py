@@ -7,7 +7,7 @@ from fl_learning.srv import *
 from std_msgs.msg import String
 from build_action import *
 from geometry_msgs.msg import Pose
-
+from math import floor
 goal_tolerance = 15
 
 p = Pose()
@@ -26,15 +26,15 @@ def execute_action_service():
 
 def execute_action(action):
     if action.action == 0:
-        p.position.y -= 0.11
-    elif action.action == 1:
         p.position.x += 0.11
+    elif action.action == 1:
+        p.position.y -= 0.11
     elif action.action == 2:
-        p.position.y += 0.11
-    elif action.action == 3:
         p.position.x -= 0.11
+    elif action.action == 3:
+        p.position.y += 0.11
         
-    execute_pose(p, planning_time=1)
+    execute_pose(p, planning_time=5)
 
 def is_goal_achieved():
     dist = sqrt((self.goal.x - self.position.x) ** 2 +
@@ -68,7 +68,7 @@ def main():
     x_goal, y_goal = cv_resp.brick.x, cv_resp.brick.y
     #x_goal, y_goal = (400.0, 400.0)
     scale = 72
-    x_goal, y_goal = x_goal/scale, y_goal/scale    
+    x_goal, y_goal = floor(x_goal/scale),floor( y_goal/scale)    
     print("goal: " ,x_goal, y_goal)
 
     c = raw_input('move the brick to start position and press Enter\n')
@@ -78,16 +78,14 @@ def main():
         if not cv_resp.success:
             print("cannot get coordinates for start pos")
             return
-        x, y = cv_resp.brick.x, cv_resp.brick.y
-        print(x, y)
-
         scale = 72
-        action = determine_action(cv_resp.tool.x / scale,
-                                  cv_resp.tool.y / scale,
-                                  cv_resp.brick.x / scale,
-                                  cv_resp.brick.y / scale,
-                                  x_goal / scale,
-                                  y_goal / scale)
+        xb, yb = floor(cv_resp.brick.x/scale), floor(cv_resp.brick.y/scale)
+        print(xb, yb)
+        xt, yt = floor(cv_resp.tool.x/scale), floor(cv_resp.tool.y/scale)
+        print(xt, yt)
+
+        action = determine_action(xt,yt,xb,yb,x_goal,y_goal)
+        print('Action - {}'.format(action))
 
         execute_action(action)
         
