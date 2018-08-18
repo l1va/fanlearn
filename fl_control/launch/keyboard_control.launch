@@ -1,7 +1,7 @@
 <launch>
 
     <include file="$(find fl_gazebo)/launch/simulate.launch"/>
-    <include file="$(find fl_moveit)/launch/move_group.launch"/>
+    <include file="$(find fanuc_cr7ial_moveit_config)/launch/move_group.launch"/>
 
     <node pkg="fl_control" type="keyboard_control.py" output="screen" name="keyboard_control">
     </node>
