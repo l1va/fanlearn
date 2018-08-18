@@ -23,34 +23,65 @@ init_pose.orientation.w = 0.65
 
 
 def is_goal_achieved():
-    dist = sqrt((self.goal.x - self.position.x)**2 +
-                    (self.goal.y - self.position.y)**2)
+    dist = sqrt((self.goal.x - self.position.x) ** 2 +
+                (self.goal.y - self.position.y) ** 2)
     return self.dist_to_goal() < self.tolerance
+
 
 def main():
     rospy.init_node('learning_control', anonymous=True)
     rospy.sleep(0.5)
 
     c = raw_input('press Enter when all is loaded\n')
-    execute_pose(init_pose, planning_time=5)
+    execute_pose(init_pose, planning_time=10)
     global p
     p = init_pose
     print('Learning control mode ...')
 
-    rospy.wait_for_service('Computervision')
-    compvis = rospy.ServiceProxy('Computervision', GetCoords)
+    rospy.wait_for_service('get_coordinates')
+    compvis = rospy.ServiceProxy('get_coordinates', GetCoords)
 
     rospy.wait_for_service('determine_action')
-    determine_action = rospy.ServiceProxy('determine_action',       DetermineAction)
+    determine_action = rospy.ServiceProxy('determine_action', DetermineAction)
 
-    # print("calling compvis")
-    # cv_resp = compvis()
-    # x,y = cv_resp.brick
-    # print(x,y)
-    #
-    # p.position.x = x
-    # p.position.y = y
-    # execute_pose(p, planning_time=5)
+    print("calling compvis")
+    cv_resp = compvis()
+    if not cv_resp.success:
+        print("cannot get coordinates")
+        return
+    x_goal, y_goal = cv_resp.brick.x, cv_resp.brick.y
+    print("goal: " ,x_goal, y_goal)
+    #x_goal, y_goal = (400.0, 400.0)
+
+    c = raw_input('move the brick to start position and press Enter\n')
+
+    while True:
+        cv_resp = compvis()
+        if not cv_resp.success:
+            print("cannot get coordinates for start pos")
+            return
+        x, y = cv_resp.brick.x, cv_resp.brick.y
+        print(x, y)
+
+        scale = 6
+        action = determine_action(cv_resp.tool.x / scale,
+                                  cv_resp.tool.y / scale,
+                                  cv_resp.brick.x / scale,
+                                  cv_resp.brick.y / scale,
+                                  x_goal / scale,
+                                  y_goal / scale).action
+
+        if action == 0:
+            p.position.y -= 0.1
+        elif action == 1:
+            p.position.x += 0.1
+        elif action == 2:
+            p.position.y += 0.1
+        elif action == 3:
+            p.position.x -= 0.1
+
+        execute_pose(p, planning_time=1)
+        c = raw_input('for next step press Enter\n')
 
     # rate = rospy.Rate(10)
     # while True:
