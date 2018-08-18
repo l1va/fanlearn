@@ -77,6 +77,7 @@ def solve_ik(pose):
         request.ik_request.ik_link_name = "link_6"
         request.ik_request.attempts = 20
         request.ik_request.pose_stamped.header.frame_id = "/base_link"
+        print(pose)
         request.ik_request.pose_stamped.pose = pose
 
         ik = rospy.ServiceProxy('compute_ik', GetPositionIK)

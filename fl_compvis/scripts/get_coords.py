@@ -10,13 +10,15 @@ from cv_bridge import CvBridge, CvBridgeError
 
 bridge = CvBridge()
 
+max_y=300
+
 def find_coords(img):
     img = bridge.imgmsg_to_cv2(img, "bgr8")
     # if topic=="pylon_camera_node/image_raw":
     #      im=im[85:690,405:1115]
     # else:
     #      im=im[238:860,233:971]
-    img = img[85:690,405:1115]
+    img = img[416:716,405:1115]
 
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     brick = get_brick_coords(hsv)
@@ -28,6 +30,7 @@ def find_coords(img):
     return (brick, tool)
 
 def get_brick_coords(hsv):
+    global max_y
     rl1 = (0, 100, 100)
     rh1 = (20, 255, 255)
     mask1 = cv2.inRange(hsv, rl1, rh1)
@@ -50,9 +53,10 @@ def get_brick_coords(hsv):
         return None
     xo = int(M["m10"] / M["m00"])
     yo = int(M["m01"] / M["m00"])
-    return Coordinates(xo, yo)
+    return Coordinates(xo, max_y-yo)
 
 def get_tool_coords(hsv):
+    global max_y
     gl = (40, 100, 40)
     gh = (79, 255, 255)
     mask1 = cv2.inRange(hsv, gl, gh)
@@ -69,7 +73,7 @@ def get_tool_coords(hsv):
                     j += 1
                 xe = (x1 + j) / 2.0
                 break
-    return Coordinates(xe,ye)
+    return Coordinates(xe,max_y-ye)
 
 def get_coords_callback(empty):
     img = rospy.wait_for_message("/fanlearn_camera/image_raw", Image, timeout=3)

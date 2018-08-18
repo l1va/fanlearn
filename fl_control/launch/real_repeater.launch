@@ -1,0 +1,20 @@
+<launch>
+
+    <include file="$(find fl_gazebo)/launch/visualize.launch"/>
+
+    <remap from="/pylon_camera_node/image_raw" to="/fanlearn_camera/image_raw"/>
+    <include file="$(find pylon_camera)/launch/pylon_camera_node.launch"/>
+
+    <include file="$(find fanuc_cr7ial_moveit_config)/launch/moveit_planning_execution.launch">
+        <arg name="sim" value="false"/>
+        <arg name="robot_ip" value="192.168.1.33"/>
+    </include>
+
+    <node pkg="fl_compvis" type="get_coords.py" output="screen" name="get_coords">
+    </node>
+
+    <node pkg="fl_control" type="repeater.py" output="screen" name="control">
+    </node>
+
+
+</launch>

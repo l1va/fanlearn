@@ -66,8 +66,10 @@ def main():
         print("cannot get coordinates")
         return
     x_goal, y_goal = cv_resp.brick.x, cv_resp.brick.y
-    print("goal: " ,x_goal, y_goal)
     #x_goal, y_goal = (400.0, 400.0)
+    scale = 72
+    x_goal, y_goal = x_goal/scale, y_goal/scale    
+    print("goal: " ,x_goal, y_goal)
 
     c = raw_input('move the brick to start position and press Enter\n')
 
@@ -79,7 +81,7 @@ def main():
         x, y = cv_resp.brick.x, cv_resp.brick.y
         print(x, y)
 
-        scale = 6
+        scale = 72
         action = determine_action(cv_resp.tool.x / scale,
                                   cv_resp.tool.y / scale,
                                   cv_resp.brick.x / scale,
@@ -91,31 +93,6 @@ def main():
         
         c = raw_input('for next step press Enter\n')
 
-    # rate = rospy.Rate(10)
-    # while True:
-    #     if is_goal_achieved():
-    #         break  # TODO finish logic with getting new goal
-    #
-    #     cv_resp = compvis()
-    #     action = determine_action(cv_resp.tool.x / scale,
-    #                                 cv_resp.tool.y / scale,
-    #                                 cv_resp.brick.x / scale,
-    #                                 cv_resp.brick.y / scale,
-    #                                 brick.goal.x / scale,
-    #                                 brick.goal.y / scale)
-    #     print('Command from learning node: {}'.format(commands))
-    #     if action == 0:
-    #         p.x+=0.01
-    #     elif action ==1:
-    #         p.x-=0.01
-    #     elif action ==2:
-    #         p.x-=0.01
-    #     elif action == 3:
-    #         p.x -= 0.01
-    #     else:
-    #         print("unknown action")
-    #     execute_pose(p)
-    #     rate.sleep()
 
 
 if __name__ == "__main__":
