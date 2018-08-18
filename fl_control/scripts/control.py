@@ -50,8 +50,10 @@ def main():
         print("cannot get coordinates")
         return
     x_goal, y_goal = cv_resp.brick.x, cv_resp.brick.y
-    print("goal: " ,x_goal, y_goal)
     #x_goal, y_goal = (400.0, 400.0)
+    scale = 72
+    x_goal, y_goal = x_goal/scale, y_goal/scale    
+    print("goal: " ,x_goal, y_goal)
 
     c = raw_input('move the brick to start position and press Enter\n')
 
@@ -63,13 +65,12 @@ def main():
         x, y = cv_resp.brick.x, cv_resp.brick.y
         print(x, y)
 
-        scale = 6
-        action = determine_action(cv_resp.tool.x / scale,
-                                  cv_resp.tool.y / scale,
-                                  cv_resp.brick.x / scale,
-                                  cv_resp.brick.y / scale,
-                                  x_goal / scale,
-                                  y_goal / scale).action
+        tx = cv_resp.tool.x / scale
+        ty = cv_resp.tool.y / scale
+        bx = cv_resp.brick.x / scale
+        by = cv_resp.brick.y / scale
+        print(" tool, brick :", tx,ty,bx,by)
+        action = determine_action(tx,ty,bx,by, x_goal, y_goal).action
 
         if action == 0:
             p.position.y -= 0.11
