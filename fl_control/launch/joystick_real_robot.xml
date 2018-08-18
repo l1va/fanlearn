@@ -1,7 +1,9 @@
 <launch>
 
-    <include file="$(find fl_gazebo)/launch/simulate.launch"/>
-    <include file="$(find fanuc_cr7ial_moveit_config)/launch/move_group.launch"/>
+    <include file="$(find fanuc_cr7ial_moveit_config)/launch/moveit_planning_execution.launch">
+        <arg name="sim" value="false" />
+        <arg name="robot_ip" value="192.168.1.33" />
+    </include>
 
     <rosparam param="joy_node/dev">/dev/input/js0</rosparam>
 
