@@ -21,6 +21,20 @@ init_pose.orientation.y = 0.65
 init_pose.orientation.z = 0.25
 init_pose.orientation.w = 0.65
 
+def execute_action_service():
+    rospy.Service('execute_action', ExecuteAction, execute_action)
+
+def execute_action(action):
+    if action.action == 0:
+        p.position.y -= 0.11
+    elif action.action == 1:
+        p.position.x += 0.11
+    elif action.action == 2:
+        p.position.y += 0.11
+    elif action.action == 3:
+        p.position.x -= 0.11
+        
+    execute_pose(p, planning_time=1)
 
 def is_goal_achieved():
     dist = sqrt((self.goal.x - self.position.x) ** 2 +
@@ -31,6 +45,8 @@ def is_goal_achieved():
 def main():
     rospy.init_node('learning_control', anonymous=True)
     rospy.sleep(0.5)
+
+    execute_action_service()
 
     c = raw_input('press Enter when all is loaded\n')
     execute_pose(init_pose, planning_time=10)
@@ -69,18 +85,10 @@ def main():
                                   cv_resp.brick.x / scale,
                                   cv_resp.brick.y / scale,
                                   x_goal / scale,
-                                  y_goal / scale).action
+                                  y_goal / scale)
 
-        if action == 0:
-            p.position.y -= 0.11
-        elif action == 1:
-            p.position.x += 0.11
-        elif action == 2:
-            p.position.y += 0.11
-        elif action == 3:
-            p.position.x -= 0.11
-
-        execute_pose(p, planning_time=1)
+        execute_action(action)
+        
         c = raw_input('for next step press Enter\n')
 
     # rate = rospy.Rate(10)
