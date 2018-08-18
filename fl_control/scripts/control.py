@@ -91,31 +91,6 @@ def main():
         
         c = raw_input('for next step press Enter\n')
 
-    # rate = rospy.Rate(10)
-    # while True:
-    #     if is_goal_achieved():
-    #         break  # TODO finish logic with getting new goal
-    #
-    #     cv_resp = compvis()
-    #     action = determine_action(cv_resp.tool.x / scale,
-    #                                 cv_resp.tool.y / scale,
-    #                                 cv_resp.brick.x / scale,
-    #                                 cv_resp.brick.y / scale,
-    #                                 brick.goal.x / scale,
-    #                                 brick.goal.y / scale)
-    #     print('Command from learning node: {}'.format(commands))
-    #     if action == 0:
-    #         p.x+=0.01
-    #     elif action ==1:
-    #         p.x-=0.01
-    #     elif action ==2:
-    #         p.x-=0.01
-    #     elif action == 3:
-    #         p.x -= 0.01
-    #     else:
-    #         print("unknown action")
-    #     execute_pose(p)
-    #     rate.sleep()
 
 
 if __name__ == "__main__":

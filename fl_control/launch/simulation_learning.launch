@@ -7,7 +7,7 @@
 
     <node pkg="fl_learning" type="learning.py" output="screen" name="learn">
     </node>
-    <node pkg="fl_compvis" type="get_coords.py" output="screen" name="see">
+    <node pkg="fl_compvis" type="get_coords.py" output="screen" name="get_coords">
     </node>
 
     <node pkg="fl_control" type="control.py" output="screen" name="control">
