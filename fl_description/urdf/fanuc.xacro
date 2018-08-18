@@ -27,7 +27,7 @@
     </table_macro>
 
     <xacro:include filename="$(find fl_description)/urdf/brick.xacro"/>
-    <brick_macro xyz="0.5 0.2 0.35"
+    <brick_macro xyz="0.6 0.4 0.35"
                  size="0.1 0.1 0.1" parent="world"
                  name="fl_box">
     </brick_macro>

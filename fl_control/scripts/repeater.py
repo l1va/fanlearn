@@ -23,9 +23,9 @@ def convert(x, y):
     # our robot works from 0.4 to 1 by x and from -0.6 to 0.6
 
     # it means for x: 0.4 - 0, 1 - 605. But half a table - it is not 600.
-    xg = 0.41 + x * 1.5 / 1000.0
+    xg = 0.41 + y * 2 / 1000.0
     # for y: -0.6 - 710, 0.6 - 0
-    yg = -0.6 + (710 - y) * 1.2 / 710.0
+    yg = -0.6 + (710 - x) * 1.2 / 710.0
     return xg, yg
 
 

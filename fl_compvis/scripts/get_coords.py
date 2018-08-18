@@ -10,7 +10,7 @@ from cv_bridge import CvBridge, CvBridgeError
 
 bridge = CvBridge()
 
-max_y=716
+max_y=300
 
 def find_coords(img):
     img = bridge.imgmsg_to_cv2(img, "bgr8")
