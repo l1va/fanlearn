@@ -72,13 +72,13 @@ def main():
                                   y_goal / scale).action
 
         if action == 0:
-            p.position.y -= 0.1
+            p.position.y -= 0.11
         elif action == 1:
-            p.position.x += 0.1
+            p.position.x += 0.11
         elif action == 2:
-            p.position.y += 0.1
+            p.position.y += 0.11
         elif action == 3:
-            p.position.x -= 0.1
+            p.position.x -= 0.11
 
         execute_pose(p, planning_time=1)
         c = raw_input('for next step press Enter\n')

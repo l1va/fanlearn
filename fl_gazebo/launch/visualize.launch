@@ -1,0 +1,17 @@
+<launch>
+
+    <include file="$(find gazebo_ros)/launch/empty_world.launch">
+        <arg name="world_name" value="$(find fl_gazebo)/worlds/default.world"/>
+    </include>
+
+    <param name="robot_description"
+           command="$(find xacro)/xacro --inorder '$(find fl_description)/urdf/fanuc_without_sensors.xacro'"/>
+
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+          args="-urdf -model fanuc -param robot_description"/>
+
+    <rosparam file="$(find fl_gazebo)/controller/arm_controller_fanuc.yaml" command="load"/>
+    <node name="arm_controller_spawner" pkg="controller_manager" type="controller_manager" args="spawn arm_controller"
+          respawn="false" output="screen"/>
+
+</launch>

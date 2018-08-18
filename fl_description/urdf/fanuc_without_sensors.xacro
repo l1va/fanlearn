@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<robot name="fanuc_cr7ial" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <gazebo>
+        <plugin name="ros_control" filename="libgazebo_ros_control.so">
+        </plugin>
+    </gazebo>
+
+    <link name="world"/>
+
+    <xacro:include filename="$(find fl_description)/urdf/fanuc_macro.xacro"/>
+    <fanuc_cr7ial prefix="" parent="world"/>
+
+    <xacro:include filename="$(find fl_description)/urdf/table.urdf.xacro"/>
+    <table_macro xyz="0.8 0 0"
+                 size="1.2 1.2 0.6" parent="world"
+                 name="fl_table">
+    </table_macro>
+
+    <xacro:include filename="$(find fl_description)/urdf/brick.xacro"/>
+    <brick_macro xyz="0.5 0.2 0.35"
+                 size="0.1 0.1 0.1" parent="world"
+                 name="fl_box">
+    </brick_macro>
+
+
+</robot>
