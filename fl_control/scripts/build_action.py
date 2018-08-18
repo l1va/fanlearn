@@ -5,7 +5,7 @@ from moveit_msgs.srv import GetPositionIK, GetPositionIKRequest, GetPositionFKRe
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 from sensor_msgs.msg import JointState
 import rospy
-from fl_control.scripts.moveit_builder import MoveItGoalBuilder
+from moveit_builder import MoveItGoalBuilder
 
 builder = MoveItGoalBuilder()
 action_client = SimpleActionClient('move_group', MoveGroupAction)
@@ -21,17 +21,9 @@ def get_pose():  # TODO: test me
     return pose
 
 
-def execute_pose(pose, planning_time=0.2):
+def execute_pose(pose, planning_time=1):
     positions = solve_ik(pose)
     if positions != None:
-        # real
-        builder.set_joint_goal(joint_names, positions)
-        builder.allowed_planning_time = planning_time
-        builder.plan_only = False
-        to_send = builder.build()
-        action_client.send_goal(to_send)
-        action_client.wait_for_result()
-
         # simulation
         jt = JointTrajectory()
         jt.joint_names = joint_names
@@ -42,6 +34,13 @@ def execute_pose(pose, planning_time=0.2):
         jtp.time_from_start = rospy.Duration(planning_time)
         jt.points.append(jtp)
         sim_pub.publish(jt)
+        # real
+        builder.set_joint_goal(joint_names, positions)
+        builder.allowed_planning_time = planning_time
+        builder.plan_only = False
+        to_send = builder.build()
+        action_client.send_goal(to_send)
+        action_client.wait_for_result()
 
 
 def solve_fk(js):  # TODO: test me

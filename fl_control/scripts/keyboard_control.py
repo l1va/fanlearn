@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 import rospy
-from fl_control.scripts.build_action import *
+from build_action import *
 from geometry_msgs.msg import Pose
-from std_msgs.msg import String
 
 p = Pose()
 
