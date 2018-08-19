@@ -60,25 +60,40 @@ def main():
     rospy.wait_for_service('determine_action')
     determine_action = rospy.ServiceProxy('determine_action', DetermineAction)
 
-    print("calling compvis")
-    cv_resp = compvis()
-    if not cv_resp.success:
-        print("cannot get coordinates")
-        return
-    x_goal, y_goal = cv_resp.brick.x, cv_resp.brick.y
-    #x_goal, y_goal = (400.0, 400.0)
-    scale = 72
-    x_goal, y_goal = floor(x_goal/scale),floor( y_goal/scale)    
-    print("goal: " ,x_goal, y_goal)
-
-    c = raw_input('move the brick to start position and press Enter\n')
+    x_goal, y_goal = (0, 0)
+    xb,yb=(0,0)
+    xt=yt=0
+    scale = 74
 
     while True:
+        if abs(yb-y_goal)<1 and abs(xb-x_goal)<1:
+            c= raw_input("Move the brick to a new goal")
+            cv_resp = compvis()
+            if not cv_resp.success:
+                print("cannot get coordinates")
+                return
+            x_goal, y_goal = cv_resp.brick.x, cv_resp.brick.y
+            
+            x_goal, y_goal = floor(x_goal/scale),floor( y_goal/scale)    
+            print("goal: " ,x_goal, y_goal)
+            c = raw_input('move the brick to start position and press Enter\n')
+            cv_resp = compvis()
+            if not cv_resp.success:
+                print("cannot get coordinates for start pos")
+                return
+            xb, yb = floor(cv_resp.brick.x/scale), floor(cv_resp.brick.y/scale)
+            print(xb, yb)
+            xt, yt = floor(cv_resp.tool.x/scale), floor(cv_resp.tool.y/scale)
+            print(xt, yt)
+
+            action = determine_action(xt,yt,xb,yb,x_goal,y_goal)
+            print('Action - {}'.format(action))
+            execute_action(action)
+
         cv_resp = compvis()
         if not cv_resp.success:
             print("cannot get coordinates for start pos")
             return
-        scale = 72
         xb, yb = floor(cv_resp.brick.x/scale), floor(cv_resp.brick.y/scale)
         print(xb, yb)
         xt, yt = floor(cv_resp.tool.x/scale), floor(cv_resp.tool.y/scale)
@@ -89,7 +104,7 @@ def main():
 
         execute_action(action)
         
-        c = raw_input('for next step press Enter\n')
+        #c = raw_input('for next step press Enter\n')
 
 
 
