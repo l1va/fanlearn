@@ -10,33 +10,33 @@ p = Pose()
 def joy_handler(data):
     c = data.data
     if c == 'x+':
-        p.position.x += 0.01
+        p.position.x += 0.05
     elif c == 'x-':
-        p.position.x -= 0.01
+        p.position.x -= 0.05
     elif c == 'y+':
-        p.position.y += 0.01
+        p.position.y += 0.05
     elif c == 'y-':
-        p.position.y -= 0.01
+        p.position.y -= 0.05
     elif c == 'z+':
-        p.position.z += 0.01
+        p.position.z += 0.05
     elif c == 'z-':
-        p.position.z -= 0.01
+        p.position.z -= 0.05
     elif c == 'qx+':
-        p.orientation.x += 0.01
+        p.orientation.x += 0.03
     elif c == 'qx-':
-        p.orientation.x -= 0.01
+        p.orientation.x -= 0.03
     elif c == 'qy+':
-        p.orientation.y += 0.01
+        p.orientation.y += 0.03
     elif c == 'qy-':
-        p.orientation.y -= 0.01
+        p.orientation.y -= 0.03
     elif c == 'qz+':
-        p.orientation.z += 0.01
+        p.orientation.z += 0.03
     elif c == 'qz-':
-        p.orientation.z -= 0.01
+        p.orientation.z -= 0.03
     elif c == 'qw+':
-        p.orientation.w += 0.01
+        p.orientation.w += 0.03
     elif c == 'qw-':
-        p.orientation.w -= 0.01
+        p.orientation.w -= 0.03
     execute_pose(p)
 
 def main():

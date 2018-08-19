@@ -10,33 +10,33 @@ def run():
     while True:
         c = raw_input('input\n')
         if c == 'w':
-            p.position.x += 0.01
+            p.position.x += 0.05
         elif c == 's':
-            p.position.x -= 0.01
+            p.position.x -= 0.05
         elif c == 'a':
-            p.position.y += 0.01
+            p.position.y += 0.05
         elif c == 'd':
-            p.position.y -= 0.01
+            p.position.y -= 0.05
         elif c == 'e':
-            p.position.z += 0.01
+            p.position.z += 0.05
         elif c == 'q':
-            p.position.z -= 0.01
+            p.position.z -= 0.05
         elif c == 'W':
-            p.orientation.x += 0.01
+            p.orientation.x += 0.03
         elif c == 'S':
-            p.orientation.x -= 0.01
+            p.orientation.x -= 0.03
         elif c == 'A':
-            p.orientation.y += 0.01
+            p.orientation.y += 0.03
         elif c == 'D':
-            p.orientation.y -= 0.01
+            p.orientation.y -= 0.03
         elif c == 'E':
-            p.orientation.z += 0.01
+            p.orientation.z += 0.03
         elif c == 'Q':
-            p.orientation.z -= 0.01
+            p.orientation.z -= 0.03
         elif c == 'C':
-            p.orientation.w += 0.01
+            p.orientation.w += 0.03
         elif c == 'Z':
-            p.orientation.w -= 0.01
+            p.orientation.w -= 0.03
         else:
             print("wrong command:", c)
             continue
