@@ -168,18 +168,7 @@ if you need more information:
 ```
 sudo apt-get install ros-kinetic-industrial-core
 ```
- ABB stack:
-```
-sudo apt-get install ros-kinetic-abb
-```
- Universal robot stack:
-```
-sudo apt-get install ros-kinetic-universal-robot
-```
- ROS_canopen stack:
-```
-sudo apt-get install ros-kinetic-ros-canopen
-```
+ 
 ### 2) Create catkin workspace
 ```
 mkdir -p ~/catkin_ws/src
